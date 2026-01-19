@@ -1,0 +1,25 @@
+{
+  "name": "cjs-browser-shim",
+  "version": "0.0.1",
+  "description": "A lightweight shim for CommonJS (CJS) modules in the browser",
+  "keywords": [
+    "cjs",
+    "browser",
+    "shim"
+  ],
+  "homepage": "https://github.com/nudeps/cjs-browser-shim#readme",
+  "bugs": {
+    "url": "https://github.com/nudeps/cjs-browser-shim/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nudeps/cjs-browser-shim.git"
+  },
+  "license": "MIT",
+  "author": "Lea Verou",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
