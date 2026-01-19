@@ -1,6 +1,6 @@
 {
   "name": "cjs-browser-shim",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "A lightweight shim for CommonJS (CJS) modules in the browser",
   "keywords": [
     "cjs",
