@@ -46,17 +46,44 @@ export function resolve (specifier, parentURL = location.href) {
 
 	map ??= getResolvedImportMap();
 
-	for (let s in map.imports) {
-		if (specifier === s) {
-			return new URL(map.imports[s], parentURL).href;
-		}
-		if (s.endsWith("/") && specifier.startsWith(s)) {
-			let target = map.imports[s] + specifier.slice(s.length);
-			return new URL(target, parentURL).href;
+	// Check scopes first: most-specific (longest) matching scope wins
+	let scopeKeys = Object.keys(map.scopes)
+		.filter(scope => parentURL.startsWith(new URL(scope, parentURL).href))
+		.sort((a, b) => b.length - a.length);
+
+	for (let scope of scopeKeys) {
+		let match = matchSpecifier(specifier, map.scopes[scope]);
+		if (match !== undefined) {
+			return new URL(match, parentURL).href;
 		}
 	}
 
+	// Fall back to top-level imports
+	let match = matchSpecifier(specifier, map.imports);
+	if (match !== undefined) {
+		return new URL(match, parentURL).href;
+	}
+
 	throw new TypeError(`Unknown specifier: ${specifier}`);
+}
+
+/**
+ * Match a specifier against an imports-like mapping object.
+ * Returns the resolved target string, or undefined if no match.
+ * @param {string} specifier
+ * @param {Record<string, string>} mappings
+ * @returns {string | undefined}
+ */
+function matchSpecifier (specifier, mappings) {
+	if (specifier in mappings) {
+		return mappings[specifier];
+	}
+
+	for (let key in mappings) {
+		if (key.endsWith("/") && specifier.startsWith(key)) {
+			return mappings[key] + specifier.slice(key.length);
+		}
+	}
 }
 
 export function isSpecifier (specifier) {
